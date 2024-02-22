@@ -43,6 +43,15 @@ class GildedRose {
                 break;
             case "Sulfuras, Hand of Ragnaros":
                 break;
+            case "Conjured Mana Cake":
+                if (item.sellIn > 0) {
+                    amountBy = -2;
+                } else {
+                    amountBy = -4;
+                }
+                item.quality = Math.max(item.quality + amountBy, MIN_QUALITY);
+                item.sellIn -= 1;
+                break;
             default:
                 if (item.sellIn > 0) {
                     amountBy = -1;
