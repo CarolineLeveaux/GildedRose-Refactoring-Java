@@ -1,6 +1,8 @@
 package com.gildedrose;
 
 class GildedRose {
+    private static final int MAX_QUALITY = 50;
+    private static final int MIN_QUALITY = 0;
     Item[] items;
 
     public GildedRose(Item[] items) {
@@ -14,49 +16,41 @@ class GildedRose {
     }
 
     private static void updateItem(Item item) {
+        int amountBy = 0;
         switch (item.name) {
             case "Aged Brie":
-                if (item.quality < 50) {
-                    item.quality = item.quality + 1;
+                if (item.sellIn > 0) {
+                    amountBy = 1;
+                } else {
+                    amountBy = 2;
                 }
-                item.sellIn = item.sellIn - 1;
-                if (item.sellIn < 0) {
-                    if (item.quality < 50) {
-                        item.quality = item.quality + 1;
-                    }
-                }
+                item.quality = Math.min(item.quality + amountBy, MAX_QUALITY);
+                item.sellIn--;
                 break;
             case "Backstage passes to a TAFKAL80ETC concert":
-                if (item.quality < 50) {
-                    item.quality = item.quality + 1;
-                    if (item.sellIn < 11) {
-                        if (item.quality < 50) {
-                            item.quality = item.quality + 1;
-                        }
-                    }
-                    if (item.sellIn < 6) {
-                        if (item.quality < 50) {
-                            item.quality = item.quality + 1;
-                        }
-                    }
-                }
-                item.sellIn = item.sellIn - 1;
-                if (item.sellIn < 0) {
+                if (item.sellIn > 10) {
+                    amountBy = 1;
+                } else if (item.sellIn > 5) {
+                    amountBy = 2;
+                } else if (item.sellIn > 0) {
+                    amountBy = 3;
+                } else {
                     item.quality = 0;
                 }
+                item.quality = Math.min(item.quality + amountBy, MAX_QUALITY);
+                item.sellIn--;
+
                 break;
             case "Sulfuras, Hand of Ragnaros":
                 break;
             default:
-                if (item.quality > 0) {
-                    item.quality = item.quality - 1;
+                if (item.sellIn > 0) {
+                    amountBy = -1;
+                } else {
+                    amountBy = -2;
                 }
-                item.sellIn = item.sellIn - 1;
-                if (item.sellIn < 0) {
-                    if (item.quality > 0) {
-                        item.quality = item.quality - 1;
-                    }
-                }
+                item.quality = Math.max(item.quality + amountBy, MIN_QUALITY);
+                item.sellIn--;
                 break;
         }
     }
